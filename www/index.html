@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ตัวจับเวลาต้มไข่</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Kodchasan', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fffbe6;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      height: 100%;
+      background: url("./images/2d.png") no-repeat center center;
+      background-size: cover;
+      border: 4px solid #FFD54F;
+      box-shadow: 0 0 15px rgba(255, 214, 79, 0.5);
+      overflow: hidden;
+    }
+
+    .cloud-bg {
+      position: absolute;
+      top: -50px;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVQYV2P8//8/AwMDAwMEBAgEBAQEBAREREREREREREQ8P///wMDAwMDw8P///AADAwMD/////AAAAAP//AAD//wAAwP8AAP//AAD//wAA') repeat-x;
+      animation: floatClouds 15s infinite linear;
+      opacity: 0.4;
+    }
+
+    @keyframes floatClouds {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-200px); }
+    }
+
+    h1 {
+      font-size: 1.7em;
+      color: #5D4037;
+      margin: 10px 0;
+      text-shadow: 1px 1px #fff8c6;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 20px;
+      max-width: 100%;
+    }
+
+    .grid-item {
+      background-color: white;
+      color: #f57c00;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1em;
+      border: 2px solid #FFD54F;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .grid-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255, 214, 79, 0.5);
+    }
+
+    #timer-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+    }
+
+    #timer-display {
+      font-size: 3em;
+      color: #f57c00;
+      background: rgba(255, 245, 157, 0.9);
+      padding: 25px;
+      border: 4px solid #FFD54F;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px #fff5cc;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .button {
+      background: #FFD54F;
+      color: #5D4037;
+      padding: 15px 30px;
+      margin: 5px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      text-shadow: 1px 1px #fff8c6;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: #FFCA28;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(255, 214, 79, 0.7);
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 1.3em;
+      }
+
+      .grid-item {
+        font-size: 0.85em;
+        padding: 10px;
+      }
+
+      #timer-display {
+        font-size: 2.5em;
+        padding: 20px;
+      }
+
+      .button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- หน้าเลือก -->
+  <div id="selection-page" class="container">
+    <h1>เลือกประเภทไข่ที่อาต้องการ</h1>
+    <div class="cloud-bg"></div>
+    <div class="grid-container">
+      <div class="grid-item" onclick="startTimer(240)">
+        <img src="./images/4.png" alt="4 นาที" width="40px">
+        4 นาที
+      </div>
+      <div class="grid-item" onclick="startTimer(420)">
+        <img src="./images/6.png" alt="6 นาที" width="40px">
+        6 นาที
+      </div>
+      <div class="grid-item" onclick="startTimer(180)">
+        <img src="./images/8.png" alt="8 นาที" width="40px">
+        8 นาที
+      </div>
+      <div class="grid-item" onclick="startTimer(300)">
+        <img src="./images/10.png" alt="10 นาที" width="40px">
+        10 นาที
+      </div>
+    </div>
+  </div>
+
+  <!-- หน้าแสดงตัวจับเวลา -->
+  <div id="timer-page" class="container">
+    <h1 style="margin-bottom: 20%;">ไข่ต้มจะเสร็จใน ...</h1>
+    <div class="cloud-bg"></div>
+    <div id="timer-display">00:00</div>
+    <div>
+      <button class="button" onclick="toggleTimer()">หยุด</button>
+      <button class="button" onclick="resetTimer()">รีเซ็ต</button>
+    </div>
+  </div>
+
+  <audio id="alert-sound" src="alert.mp3"></audio>
+
+  <script>
+    let timeLeft = 0;
+    let timerInterval = null;
+    let isRunning = false;
+    const audio = document.getElementById('alert-sound');
+
+    function startTimer(seconds) {
+      timeLeft = seconds;
+      updateTimerDisplay();
+      document.getElementById('selection-page').style.display = 'none';
+      document.getElementById('timer-page').style.display = 'flex';
+      startCountdown();
+    }
+
+    function startCountdown() {
+      if (!isRunning) {
+        isRunning = true;
+        timerInterval = setInterval(() => {
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            audio.play().catch(err => console.log('Audio play failed:', err));
+            alert('ไข่ของคุณพร้อมแล้ว!');
+            resetTimer();
+            return;
+          }
+          timeLeft--;
+          updateTimerDisplay();
+        }, 1000);
+      }
+    }
+
+    function toggleTimer() {
+      const btn = document.querySelector('.button');
+      if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        btn.textContent = 'เริ่ม';
+      } else {
+        startCountdown();
+        btn.textContent = 'หยุด';
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      timeLeft = 0;
+      updateTimerDisplay();
+      document.getElementById('selection-page').style.display = 'flex';
+      document.getElementById('timer-page').style.display = 'none';
+      document.querySelector('.button').textContent = 'หยุด';
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById('timer-display').textContent =
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>

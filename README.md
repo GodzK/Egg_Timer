@@ -29,11 +29,10 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/GodzK/egg-timer.git
+git clone https://github.com/GodzK/Egg_Timer.git
 cd egg-timer
 
 # Install dependencies
 npm install
 
-# Initialize Capacitor
-npx cap init egg-timer com.yourcompany.eggtimer
+
